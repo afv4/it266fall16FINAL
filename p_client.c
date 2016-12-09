@@ -597,16 +597,65 @@ void InitClientPersistant (gclient_t *client)
 
 	client->pers.weapon = item;
 
-	client->pers.health			= 100;
-	client->pers.max_health		= 100;
+	item = FindItem("Shotgun");
+	client->pers.selected_item = ITEM_INDEX(item);
+	client->pers.inventory[client->pers.selected_item] = 1;
+	item = FindItem("Super Shotgun");
+	client->pers.selected_item = ITEM_INDEX(item);
+	client->pers.inventory[client->pers.selected_item] = 1;
+	item = FindItem("Machinegun");
+	client->pers.selected_item = ITEM_INDEX(item);
+	client->pers.inventory[client->pers.selected_item] = 1;
+	item = FindItem("Chaingun");
+	client->pers.selected_item = ITEM_INDEX(item);
+	client->pers.inventory[client->pers.selected_item] = 1;
+	item = FindItem("Grenade Launcher");
+	client->pers.selected_item = ITEM_INDEX(item);
+	client->pers.inventory[client->pers.selected_item] = 1;
+	item = FindItem("Rocket Launcher");
+	client->pers.selected_item = ITEM_INDEX(item);
+	client->pers.inventory[client->pers.selected_item] = 1;
+	item = FindItem("HyperBlaster");
+	client->pers.selected_item = ITEM_INDEX(item);
+	client->pers.inventory[client->pers.selected_item] = 1;
+	item = FindItem("BFG10K");
+	client->pers.selected_item = ITEM_INDEX(item);
+	client->pers.inventory[client->pers.selected_item] = 1;
+	item = FindItem("Railgun");
+	client->pers.selected_item = ITEM_INDEX(item);
+	client->pers.inventory[client->pers.selected_item] = 1;
 
-	client->pers.max_bullets	= 200;
-	client->pers.max_shells		= 100;
-	client->pers.max_rockets	= 50;
-	client->pers.max_grenades	= 50;
-	client->pers.max_cells		= 200;
-	client->pers.max_slugs		= 50;
+	item = FindItem("Shells");
+	client->pers.selected_item = ITEM_INDEX(item);
+	client->pers.inventory[client->pers.selected_item] = 999;
+	item = FindItem("Grenades");
+	client->pers.selected_item = ITEM_INDEX(item);
+	client->pers.inventory[client->pers.selected_item] = 999;
+	item = FindItem("Bullets");
+	client->pers.selected_item = ITEM_INDEX(item);
+	client->pers.inventory[client->pers.selected_item] = 999;
+	item = FindItem("Cells");
+	client->pers.selected_item = ITEM_INDEX(item);
+	client->pers.inventory[client->pers.selected_item] = 999;
+	item = FindItem("Rockets");
+	client->pers.selected_item = ITEM_INDEX(item);
+	client->pers.inventory[client->pers.selected_item] = 999;
+	item = FindItem("Slugs");
+	client->pers.selected_item = ITEM_INDEX(item);
+	client->pers.inventory[client->pers.selected_item] = 999;//afv4: give player all weapons + max ammo;
 
+	client->pers.health			= 999;	//afv4: was 999
+	client->pers.max_health		= 999;	//afv4: was 999
+
+	client->pers.max_bullets	= 999;	//afv4: was 200
+	client->pers.max_shells		= 999;	//afv4: was 100
+	client->pers.max_rockets	= 999;	//afv4: was 50
+	client->pers.max_grenades	= 999;	//afv4: was 50
+	client->pers.max_cells		= 999;	//afv4: was 200
+	client->pers.max_slugs		= 999;	//afv4: was 50
+
+	client->pers.killstreak		= 0; //afv4: resets killstreak upon death
+	gi.bprintf(PRINT_HIGH, "%s current killstreak is: %i\n", client->pers.netname, client->pers.killstreak);
 	client->pers.connected = true;
 }
 

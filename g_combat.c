@@ -102,8 +102,9 @@ void Killed (edict_t *targ, edict_t *inflictor, edict_t *attacker, int damage, v
 		targ->touch = NULL;
 		monster_death_use (targ);
 	}
-
-	targ->die (targ, inflictor, attacker, damage, point);
+	
+	if (attacker == targ->enemy){targ->die (targ, inflictor, attacker, damage, point);}
+	else{attacker->client->pers.killstreak++; targ->die (targ, inflictor, attacker, damage, point);} //afv4: increments killstreak by one per kill
 }
 
 
