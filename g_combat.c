@@ -103,7 +103,7 @@ void Killed (edict_t *targ, edict_t *inflictor, edict_t *attacker, int damage, v
 		monster_death_use (targ);
 	}
 	
-	if (attacker == targ->enemy){targ->die (targ, inflictor, attacker, damage, point);}
+	if (attacker == targ){targ->die (targ, inflictor, attacker, damage, point);} // afv4: checks if suicide kill or actual kill
 	else{attacker->client->pers.killstreak++; targ->die (targ, inflictor, attacker, damage, point);} //afv4: increments killstreak by one per kill
 }
 

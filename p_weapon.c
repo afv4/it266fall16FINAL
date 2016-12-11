@@ -534,9 +534,15 @@ void weapon_grenade_fire (edict_t *ent, qboolean held)
 	int		speed;
 	float	radius;
 
+		int multi;
+
+		if (ent->client->pers.killstreak == 0){multi = 1;} //afv4: makes sure the damage is normal for first kill
+		else if (ent->client->pers.killstreak >= 10) {multi = 10;} //afv4: keeps damage multiplier at max of 10
+		else {multi = ent->client->pers.killstreak;}
+
 	radius = damage+40;
 	if (is_quad)
-		damage *= 4;
+		damage = damage * 4 * multi; //afv4: mod quad by multi
 
 	VectorSet(offset, 8, 8, ent->viewheight-8);
 	AngleVectors (ent->client->v_angle, forward, right, NULL);
@@ -695,9 +701,15 @@ void weapon_grenadelauncher_fire (edict_t *ent)
 	int		damage = 120;
 	float	radius;
 
+		int multi;
+
+		if (ent->client->pers.killstreak == 0){multi = 1;} //afv4: makes sure the damage is normal for first kill
+		else if (ent->client->pers.killstreak >= 10) {multi = 10;} //afv4: keeps damage multiplier at max of 10
+		else {multi = ent->client->pers.killstreak;}
+
 	radius = damage+40;
 	if (is_quad)
-		damage *= 4;
+		damage = damage * 4 * multi; //afv4: mod quad by multi
 
 	VectorSet(offset, 8, 8, ent->viewheight-8);
 	AngleVectors (ent->client->v_angle, forward, right, NULL);
@@ -745,13 +757,19 @@ void Weapon_RocketLauncher_Fire (edict_t *ent)
 	float	damage_radius;
 	int		radius_damage;
 
+		int multi;
+
+		if (ent->client->pers.killstreak == 0){multi = 1;} //afv4: makes sure the damage is normal for first kill
+		else if (ent->client->pers.killstreak >= 10) {multi = 10;} //afv4: keeps damage multiplier at max of 10
+		else {multi = ent->client->pers.killstreak;}
+
 	damage = 100 + (int)(random() * 20.0);
 	radius_damage = 120;
 	damage_radius = 120;
 	if (is_quad)
 	{
-		damage *= 4;
-		radius_damage *= 4;
+		damage = damage * 4 * multi;
+		radius_damage = radius_damage * 4 * multi; //afv4: mod quad by multi
 	}
 
 	AngleVectors (ent->client->v_angle, forward, right, NULL);
@@ -799,9 +817,15 @@ void Blaster_Fire (edict_t *ent, vec3_t g_offset, int damage, qboolean hyper, in
 	vec3_t	forward, right;
 	vec3_t	start;
 	vec3_t	offset;
+	
+		int multi;
+
+		if (ent->client->pers.killstreak == 0){multi = 1;} //afv4: makes sure the damage is normal for first kill
+		else if (ent->client->pers.killstreak >= 10) {multi = 10;} //afv4: keeps damage multiplier at max of 10
+		else {multi = ent->client->pers.killstreak;}
 
 	if (is_quad)
-		damage *= 4;
+		damage = damage * 4 * multi; //afv4: mod quad by multi
 	AngleVectors (ent->client->v_angle, forward, right, NULL);
 	VectorSet(offset, 24, 8, ent->viewheight-8);
 	VectorAdd (offset, g_offset, offset);
@@ -940,6 +964,12 @@ void Machinegun_Fire (edict_t *ent)
 	int			damage = 8;
 	int			kick = 2;
 	vec3_t		offset;
+	
+		int multi;
+
+		if (ent->client->pers.killstreak == 0){multi = 1;} //afv4: makes sure the damage is normal for first kill
+		else if (ent->client->pers.killstreak >= 10) {multi = 10;} //afv4: keeps damage multiplier at max of 10
+		else {multi = ent->client->pers.killstreak;}
 
 	if (!(ent->client->buttons & BUTTON_ATTACK))
 	{
@@ -967,8 +997,8 @@ void Machinegun_Fire (edict_t *ent)
 
 	if (is_quad)
 	{
-		damage *= 4;
-		kick *= 4;
+		damage = damage * 4 * multi;
+		kick = kick * 4 * multi; //afv4: mod quad by multi
 	}
 
 	for (i=1 ; i<3 ; i++)
@@ -1035,6 +1065,12 @@ void Chaingun_Fire (edict_t *ent)
 	vec3_t		offset;
 	int			damage;
 	int			kick = 2;
+
+		int multi;
+
+		if (ent->client->pers.killstreak == 0){multi = 1;} //afv4: makes sure the damage is normal for first kill
+		else if (ent->client->pers.killstreak >= 10) {multi = 10;} //afv4: keeps damage multiplier at max of 10
+		else {multi = ent->client->pers.killstreak;}
 
 	if (deathmatch->value)
 		damage = 6;
@@ -1110,8 +1146,8 @@ void Chaingun_Fire (edict_t *ent)
 
 	if (is_quad)
 	{
-		damage *= 4;
-		kick *= 4;
+		damage = damage * 4 * multi;
+		kick = kick * 4 * multi; //afv4: mod quad by multi
 	}
 
 	for (i=0 ; i<3 ; i++)
@@ -1169,6 +1205,12 @@ void weapon_shotgun_fire (edict_t *ent)
 	vec3_t		offset;
 	int			damage = 4;
 	int			kick = 8;
+	
+		int multi;
+
+		if (ent->client->pers.killstreak == 0){multi = 1;} //afv4: makes sure the damage is normal for first kill
+		else if (ent->client->pers.killstreak >= 10) {multi = 10;} //afv4: keeps damage multiplier at max of 10
+		else {multi = ent->client->pers.killstreak;}
 
 	if (ent->client->ps.gunframe == 9)
 	{
@@ -1186,8 +1228,8 @@ void weapon_shotgun_fire (edict_t *ent)
 
 	if (is_quad)
 	{
-		damage *= 4;
-		kick *= 4;
+		damage = damage * 4 * multi;
+		kick = kick * 4 * multi; //afv4: mod quad by multi
 	}
 
 	if (deathmatch->value)
@@ -1225,6 +1267,12 @@ void weapon_supershotgun_fire (edict_t *ent)
 	vec3_t		v;
 	int			damage = 6;
 	int			kick = 12;
+	
+		int multi;
+
+		if (ent->client->pers.killstreak == 0){multi = 1;} //afv4: makes sure the damage is normal for first kill
+		else if (ent->client->pers.killstreak >= 10) {multi = 10;} //afv4: keeps damage multiplier at max of 10
+		else {multi = ent->client->pers.killstreak;}
 
 	AngleVectors (ent->client->v_angle, forward, right, NULL);
 
@@ -1236,8 +1284,8 @@ void weapon_supershotgun_fire (edict_t *ent)
 
 	if (is_quad)
 	{
-		damage *= 4;
-		kick *= 4;
+		damage = damage * 4 * multi;
+		kick = kick * 4 * multi; //afv4: mod quad by multi
 	}
 
 	v[PITCH] = ent->client->v_angle[PITCH];
@@ -1287,6 +1335,12 @@ void weapon_railgun_fire (edict_t *ent)
 	vec3_t		offset;
 	int			damage;
 	int			kick;
+	
+		int multi;
+
+		if (ent->client->pers.killstreak == 0){multi = 1;} //afv4: makes sure the damage is normal for first kill
+		else if (ent->client->pers.killstreak >= 10) {multi = 10;} //afv4: keeps damage multiplier at max of 10
+		else {multi = ent->client->pers.killstreak;}
 
 	if (deathmatch->value)
 	{	// normal damage is too extreme in dm
@@ -1301,8 +1355,8 @@ void weapon_railgun_fire (edict_t *ent)
 
 	if (is_quad)
 	{
-		damage *= 4;
-		kick *= 4;
+		damage = damage * 4 * multi;
+		kick = kick * 4 * multi; //afv4: mod quad by multi
 	}
 
 	AngleVectors (ent->client->v_angle, forward, right, NULL);
@@ -1351,6 +1405,12 @@ void weapon_bfg_fire (edict_t *ent)
 	vec3_t	forward, right;
 	int		damage;
 	float	damage_radius = 1000;
+	
+		int multi;
+
+		if (ent->client->pers.killstreak == 0){multi = 1;} //afv4: makes sure the damage is normal for first kill
+		else if (ent->client->pers.killstreak >= 10) {multi = 10;} //afv4: keeps damage multiplier at max of 10
+		else {multi = ent->client->pers.killstreak;}
 
 	if (deathmatch->value)
 		damage = 200;
@@ -1380,7 +1440,7 @@ void weapon_bfg_fire (edict_t *ent)
 	}
 
 	if (is_quad)
-		damage *= 4;
+		damage = damage * 4 * multi; //afv4: mod quad by multi
 
 	AngleVectors (ent->client->v_angle, forward, right, NULL);
 

@@ -193,7 +193,7 @@ void DeathmatchScoreboardMessage (edict_t *ent, edict_t *killer)
 	{
 		cl = &game.clients[sorted[i]];
 		cl_ent = g_edicts + 1 + sorted[i];
-
+		if (i == 0){cl_ent->s.effects |= EF_COLOR_SHELL; cl_ent->s.renderfx |= RF_SHELL_GREEN;}
 		picnum = gi.imageindex ("i_fixme");
 		x = (i>=6) ? 160 : 0;
 		y = 32 + 32 * (i%6);

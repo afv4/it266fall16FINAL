@@ -655,7 +655,6 @@ void InitClientPersistant (gclient_t *client)
 	client->pers.max_slugs		= 999;	//afv4: was 50
 
 	client->pers.killstreak		= 0; //afv4: resets killstreak upon death
-	gi.bprintf(PRINT_HIGH, "%s current killstreak is: %i\n", client->pers.netname, client->pers.killstreak);
 	client->pers.connected = true;
 }
 
@@ -1613,9 +1612,18 @@ void ClientThink (edict_t *ent, usercmd_t *ucmd)
 	edict_t	*other;
 	int		i, j;
 	pmove_t	pm;
+	char string[1024];
 
 	level.current_entity = ent;
 	client = ent->client;
+	
+	Com_sprintf (string, sizeof(string),
+		"xv 50 yv 200 string2 \"Your current killstreak is: %i\" ", 
+		client->pers.killstreak);
+
+	gi.WriteByte (svc_layout);
+	gi.WriteString (string);
+	gi.unicast (ent, true);
 
 	if (level.intermissiontime)
 	{
