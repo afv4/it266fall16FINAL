@@ -156,6 +156,10 @@ void DeathmatchScoreboardMessage (edict_t *ent, edict_t *killer)
 	gclient_t	*cl;
 	edict_t		*cl_ent;
 	char	*tag;
+	
+	//Com_sprintf (entry, sizeof(entry),
+		//"xv 50 yv 213 string2 \"Your current killstreak is: %i\" ", 
+		//ent->client->pers.killstreak); //afv: killsreak on score hud
 
 	// sort the clients by score
 	total = 0;
@@ -487,7 +491,7 @@ void G_SetStats (edict_t *ent)
 	//
 	// frags
 	//
-	ent->client->ps.stats[STAT_FRAGS] = ent->client->resp.score;
+	ent->client->ps.stats[STAT_FRAGS] = ent->client->pers.killstreak; //afv4: always shows your multiplyer
 
 	//
 	// help icon / current weapon if not shown

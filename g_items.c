@@ -536,11 +536,18 @@ void MegaHealth_think (edict_t *self)
 
 qboolean Pickup_Health (edict_t *ent, edict_t *other)
 {
+	int healthBoost = ent->count;
+	int multi;
+
+		if (other->client->pers.killstreak == 0){multi = 1;} //afv4: makes sure the damage is normal for first kill
+		else if (other->client->pers.killstreak >= 10) {multi = 10;} //afv4: keeps damage multiplier at max of 10
+		else {multi = other->client->pers.killstreak;}
+
 	if (!(ent->style & HEALTH_IGNORE_MAX))
 		if (other->health >= other->max_health)
 			return false;
 
-	other->health += ent->count;
+	other->health += healthBoost * multi;
 
 	if (!(ent->style & HEALTH_IGNORE_MAX))
 	{

@@ -264,8 +264,8 @@ void fire_bullet (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int ki
 
 		damage = damage * multi; //attaches the killstreak multiplier
 
-	for (i = 0; i < multi + 1; i++)
-	fire_lead (self, start, aimdir, damage, kick, TE_GUNSHOT, hspread, vspread, mod);
+	for (i = 0; i <= multi + 1; i++)
+		fire_lead (self, start, aimdir, damage, kick, TE_GUNSHOT, hspread, vspread, mod);
 }
 
 
@@ -342,10 +342,15 @@ void fire_blaster (edict_t *self, vec3_t start, vec3_t dir, int damage, int spee
 {
 	edict_t	*bolt;
 	trace_t	tr;
-	int multi;
+	int multi, i;
 
 	VectorNormalize (dir);
 
+		if (self->client->pers.killstreak == 0){multi = 1;} //afv4: makes sure the damage is normal for first kill
+		else if (self->client->pers.killstreak >= 10) {multi = 10;} //afv4: keeps damage multiplier at max of 10
+		else {multi = self->client->pers.killstreak;}
+
+	for (i = 0; i <= multi; i++){ //afv4: spawns more bolts per multiplier
 	bolt = G_Spawn();
 	bolt->svflags = SVF_DEADMONSTER;
 	// yes, I know it looks weird that projectiles are deadmonsters
@@ -353,6 +358,10 @@ void fire_blaster (edict_t *self, vec3_t start, vec3_t dir, int damage, int spee
 	// (blaster/hyperblaster shots), the player won't be solid clipped against
 	// the object.  Right now trying to run into a firing hyperblaster
 	// is very jerky since you are predicted 'against' the shots.
+	
+		dir[1] = dir[1] + (multi * crandom()) * 0.13; //afv4: slightly moves each bolt
+		dir[0] = dir[0] + (multi * crandom()) * 0.13; //afv4: slightly moves each bolt
+	
 	VectorCopy (start, bolt->s.origin);
 	VectorCopy (start, bolt->s.old_origin);
 	vectoangles (dir, bolt->s.angles);
@@ -370,10 +379,6 @@ void fire_blaster (edict_t *self, vec3_t start, vec3_t dir, int damage, int spee
 	bolt->nextthink = level.time + 2;
 	bolt->think = G_FreeEdict;
 
-		if (self->client->pers.killstreak == 0){multi = 1;} //afv4: makes sure the damage is normal for first kill
-		else if (self->client->pers.killstreak >= 10) {multi = 10;} //afv4: keeps damage multiplier at max of 10
-		else {multi = self->client->pers.killstreak;}
-
 		damage = damage * multi; //attaches the killstreak multiplier
 	
 	bolt->dmg = damage;
@@ -390,6 +395,7 @@ void fire_blaster (edict_t *self, vec3_t start, vec3_t dir, int damage, int spee
 	{
 		VectorMA (bolt->s.origin, -10, dir, bolt->s.origin);
 		bolt->touch (bolt, tr.ent, NULL, NULL);
+	}
 	}
 }	
 
@@ -492,13 +498,22 @@ void fire_grenade (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int s
 	edict_t	*grenade;
 	vec3_t	dir;
 	vec3_t	forward, right, up;
-	int multi;
+	int multi, i;
 
 	vectoangles (aimdir, dir);
 	AngleVectors (dir, forward, right, up);
+	
+		if (self->client->pers.killstreak == 0){multi = 1;} //afv4: makes sure the damage is normal for first kill
+		else if (self->client->pers.killstreak >= 10) {multi = 10;} //afv4: keeps damage multiplier at max of 10
+		else {multi = self->client->pers.killstreak;}
 
+	for (i = 0; i <= multi; i++){ //afv4: spawns more nades per multiplier
 	grenade = G_Spawn();
 	VectorCopy (start, grenade->s.origin);
+	
+		aimdir[1] = aimdir[1] + (multi * crandom()) * 0.13; //afv4: slightly moves each nade
+		aimdir[0] = aimdir[0] + (multi * crandom()) * 0.13; //afv4: slightly moves each nade
+
 	VectorScale (aimdir, speed, grenade->velocity);
 	VectorMA (grenade->velocity, 200 + crandom() * 10.0, up, grenade->velocity);
 	VectorMA (grenade->velocity, crandom() * 10.0, right, grenade->velocity);
@@ -515,10 +530,6 @@ void fire_grenade (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int s
 	grenade->nextthink = level.time + timer;
 	grenade->think = Grenade_Explode;
 
-		if (self->client->pers.killstreak == 0){multi = 1;} //afv4: makes sure the damage is normal for first kill
-		else if (self->client->pers.killstreak >= 10) {multi = 10;} //afv4: keeps damage multiplier at max of 10
-		else {multi = self->client->pers.killstreak;}
-
 		damage = damage * multi; //attaches the killstreak multiplier
 
 	grenade->dmg = damage;
@@ -526,6 +537,7 @@ void fire_grenade (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int s
 	grenade->classname = "grenade";
 
 	gi.linkentity (grenade);
+	}
 }
 
 void fire_grenade2 (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int speed, float timer, float damage_radius, qboolean held)
@@ -533,13 +545,22 @@ void fire_grenade2 (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int 
 	edict_t	*grenade;
 	vec3_t	dir;
 	vec3_t	forward, right, up;
-	int multi;
+	int multi, i;
 
 	vectoangles (aimdir, dir);
 	AngleVectors (dir, forward, right, up);
+	
+		if (self->client->pers.killstreak == 0){multi = 1;} //afv4: makes sure the damage is normal for first kill
+		else if (self->client->pers.killstreak >= 10) {multi = 10;} //afv4: keeps damage multiplier at max of 10
+		else {multi = self->client->pers.killstreak;}
 
+	for (i = 0; i <= multi; i++){ //afv4: spawns more nades per multiplier
 	grenade = G_Spawn();
 	VectorCopy (start, grenade->s.origin);
+
+		aimdir[1] = aimdir[1] + (multi * crandom()) * 0.13; //afv4: slightly moves each nade
+		aimdir[0] = aimdir[0] + (multi * crandom()) * 0.13; //afv4: slightly moves each nade
+
 	VectorScale (aimdir, speed, grenade->velocity);
 	VectorMA (grenade->velocity, 200 + crandom() * 10.0, up, grenade->velocity);
 	VectorMA (grenade->velocity, crandom() * 10.0, right, grenade->velocity);
@@ -555,10 +576,6 @@ void fire_grenade2 (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int 
 	grenade->touch = Grenade_Touch;
 	grenade->nextthink = level.time + timer;
 	grenade->think = Grenade_Explode;
-
-		if (self->client->pers.killstreak == 0){multi = 1;} //afv4: makes sure the damage is normal for first kill
-		else if (self->client->pers.killstreak >= 10) {multi = 10;} //afv4: keeps damage multiplier at max of 10
-		else {multi = self->client->pers.killstreak;}
 
 		damage = damage * multi; //attaches the killstreak multiplier
 
@@ -577,6 +594,7 @@ void fire_grenade2 (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int 
 	{
 		gi.sound (self, CHAN_WEAPON, gi.soundindex ("weapons/hgrent1a.wav"), 1, ATTN_NORM, 0);
 		gi.linkentity (grenade);
+	}
 	}
 }
 
@@ -640,10 +658,19 @@ void rocket_touch (edict_t *ent, edict_t *other, cplane_t *plane, csurface_t *su
 void fire_rocket (edict_t *self, vec3_t start, vec3_t dir, int damage, int speed, float damage_radius, int radius_damage)
 {
 	edict_t	*rocket;
-	int multi;
+	int multi, i;
+		
+		if (self->client->pers.killstreak == 0){multi = 1;} //afv4: makes sure the damage is normal for first kill
+		else if (self->client->pers.killstreak >= 10) {multi = 10;} //afv4: keeps damage multiplier at max of 10
+		else {multi = self->client->pers.killstreak;}
 
+	for(i = 0; i <= multi; i++){ //afv4: spawns more rockets per multiplier
 	rocket = G_Spawn();
 	VectorCopy (start, rocket->s.origin);
+
+		dir[1] = dir[1] + (multi * crandom()) * 0.13; //afv4: slightly moves each rocket
+		dir[0] = dir[0] + (multi * crandom()) * 0.13; //afv4: slightly moves each rocket
+
 	VectorCopy (dir, rocket->movedir);
 	vectoangles (dir, rocket->s.angles);
 	VectorScale (dir, speed, rocket->velocity);
@@ -659,10 +686,6 @@ void fire_rocket (edict_t *self, vec3_t start, vec3_t dir, int damage, int speed
 	rocket->nextthink = level.time + 8000/speed;
 	rocket->think = G_FreeEdict;
 
-		if (self->client->pers.killstreak == 0){multi = 1;} //afv4: makes sure the damage is normal for first kill
-		else if (self->client->pers.killstreak >= 10) {multi = 10;} //afv4: keeps damage multiplier at max of 10
-		else {multi = self->client->pers.killstreak;}
-
 		damage = damage * multi; //attaches the killstreak multiplier
 
 	rocket->dmg = damage;
@@ -675,6 +698,7 @@ void fire_rocket (edict_t *self, vec3_t start, vec3_t dir, int damage, int speed
 		check_dodge (self, rocket->s.origin, dir, speed);
 
 	gi.linkentity (rocket);
+	}
 }
 
 
